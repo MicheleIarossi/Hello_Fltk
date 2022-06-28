@@ -1,0 +1,331 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2D1FD510279B67B90018AE95 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D1FD50E279B67B90018AE95 /* Graphics.cpp */; };
+		2DA34A01278789AF000EA90C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA34A00278789AF000EA90C /* main.cpp */; };
+		2DD666F6280B51E000322F2E /* examples.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DD666F4280B51E000322F2E /* examples.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2DA349FB278789AF000EA90C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2D1FD50E279B67B90018AE95 /* Graphics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Graphics.cpp; sourceTree = "<group>"; };
+		2D1FD50F279B67B90018AE95 /* Graphics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Graphics.hpp; sourceTree = "<group>"; };
+		2DA349FD278789AF000EA90C /* Hello_Fltk */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Hello_Fltk; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DA34A00278789AF000EA90C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		2DD666F4280B51E000322F2E /* examples.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = examples.cpp; sourceTree = "<group>"; };
+		2DD666F5280B51E000322F2E /* examples.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = examples.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2DA349FA278789AF000EA90C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2DA349F4278789AF000EA90C = {
+			isa = PBXGroup;
+			children = (
+				2DA349FF278789AF000EA90C /* Hello_Fltk */,
+				2DA349FE278789AF000EA90C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2DA349FE278789AF000EA90C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2DA349FD278789AF000EA90C /* Hello_Fltk */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2DA349FF278789AF000EA90C /* Hello_Fltk */ = {
+			isa = PBXGroup;
+			children = (
+				2DA34A00278789AF000EA90C /* main.cpp */,
+				2D1FD50E279B67B90018AE95 /* Graphics.cpp */,
+				2D1FD50F279B67B90018AE95 /* Graphics.hpp */,
+				2DD666F4280B51E000322F2E /* examples.cpp */,
+				2DD666F5280B51E000322F2E /* examples.h */,
+			);
+			path = Hello_Fltk;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2DA349FC278789AF000EA90C /* Hello_Fltk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2DA34A04278789AF000EA90C /* Build configuration list for PBXNativeTarget "Hello_Fltk" */;
+			buildPhases = (
+				2DA349F9278789AF000EA90C /* Sources */,
+				2DA349FA278789AF000EA90C /* Frameworks */,
+				2DA349FB278789AF000EA90C /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Hello_Fltk;
+			productName = Hello_Fltk;
+			productReference = 2DA349FD278789AF000EA90C /* Hello_Fltk */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2DA349F5278789AF000EA90C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1330;
+				TargetAttributes = {
+					2DA349FC278789AF000EA90C = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 2DA349F8278789AF000EA90C /* Build configuration list for PBXProject "Hello_Fltk" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2DA349F4278789AF000EA90C;
+			productRefGroup = 2DA349FE278789AF000EA90C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2DA349FC278789AF000EA90C /* Hello_Fltk */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2DA349F9278789AF000EA90C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D1FD510279B67B90018AE95 /* Graphics.cpp in Sources */,
+				2DA34A01278789AF000EA90C /* main.cpp in Sources */,
+				2DD666F6280B51E000322F2E /* examples.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2DA34A02278789AF000EA90C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		2DA34A03278789AF000EA90C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		2DA34A05278789AF000EA90C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = "/Users/miia/Programming/fltk-1.3.8";
+				LIBRARY_SEARCH_PATHS = "/Users/miia/Programming/fltk-1.3.8/lib";
+				OTHER_CFLAGS = (
+					"-D_LARGEFILE_SOURCE",
+					"-D_LARGEFILE64_SOURCE",
+					"-D_THREAD_SAFE",
+					"-D_REENTRANT",
+				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = (
+					"-lfltk",
+					"-lfltk_images",
+					"-lfltk_jpeg",
+					"-lfltk_png",
+					"-lfltk_z",
+					"-lpthread",
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2DA34A06278789AF000EA90C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = "/Users/miia/Programming/fltk-1.3.8";
+				LIBRARY_SEARCH_PATHS = "/Users/miia/Programming/fltk-1.3.8/lib";
+				OTHER_CFLAGS = (
+					"-D_LARGEFILE_SOURCE",
+					"-D_LARGEFILE64_SOURCE",
+					"-D_THREAD_SAFE",
+					"-D_REENTRANT",
+				);
+				OTHER_LDFLAGS = (
+					"-lfltk",
+					"-lfltk_images",
+					"-lfltk_jpeg",
+					"-lfltk_png",
+					"-lfltk_z",
+					"-lpthread",
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2DA349F8278789AF000EA90C /* Build configuration list for PBXProject "Hello_Fltk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2DA34A02278789AF000EA90C /* Debug */,
+				2DA34A03278789AF000EA90C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2DA34A04278789AF000EA90C /* Build configuration list for PBXNativeTarget "Hello_Fltk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2DA34A05278789AF000EA90C /* Debug */,
+				2DA34A06278789AF000EA90C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2DA349F5278789AF000EA90C /* Project object */;
+}

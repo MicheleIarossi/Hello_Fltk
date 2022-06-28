@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>10</integer>
+	<key>logs</key>
+	<dict>
+		<key>676E31F7-8BB6-4491-84A0-BE35F0FEB7EA</key>
+		<dict>
+			<key>className</key>
+			<string>DBGConsoleLog</string>
+			<key>documentTypeString</key>
+			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
+			<key>fileName</key>
+			<string>676E31F7-8BB6-4491-84A0-BE35F0FEB7EA.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Hello_Fltk project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Hello_Fltk</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Run Hello_Fltk</string>
+			<key>timeStartedRecording</key>
+			<real>678057571.72612095</real>
+			<key>timeStoppedRecording</key>
+			<real>678057598.79937506</real>
+			<key>title</key>
+			<string>Run Hello_Fltk</string>
+			<key>uniqueIdentifier</key>
+			<string>676E31F7-8BB6-4491-84A0-BE35F0FEB7EA</string>
+		</dict>
+		<key>BB653559-D15A-47AB-8A6A-F59E950BFE94</key>
+		<dict>
+			<key>className</key>
+			<string>DBGConsoleLog</string>
+			<key>documentTypeString</key>
+			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
+			<key>fileName</key>
+			<string>BB653559-D15A-47AB-8A6A-F59E950BFE94.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Hello_Fltk project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Hello_Fltk</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Run Hello_Fltk</string>
+			<key>timeStartedRecording</key>
+			<real>678140001.79347599</real>
+			<key>timeStoppedRecording</key>
+			<real>678140080.17729199</real>
+			<key>title</key>
+			<string>Run Hello_Fltk</string>
+			<key>uniqueIdentifier</key>
+			<string>BB653559-D15A-47AB-8A6A-F59E950BFE94</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

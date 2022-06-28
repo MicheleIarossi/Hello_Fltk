@@ -1,0 +1,60 @@
+{
+  "_buildCommand2" : {
+    "command" : "prepareForIndexing",
+    "enableIndexBuildArena" : true,
+    "targets" : null
+  },
+  "buildCommand" : "build",
+  "configuredTargets" : [
+    {
+      "guid" : "d0eddd71804d0b9bb3edc636fe3afb7bdc6f39cbec2cacab5878fd9fb1525492"
+    }
+  ],
+  "containerPath" : "/Users/miia/Programming/C++ Progs/Introduction to C++/Hello_Fltk/Hello_Fltk.xcodeproj",
+  "continueBuildingAfterErrors" : true,
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "indexbuild",
+    "activeArchitecture" : "x86_64",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : false,
+      "platform" : "macosx",
+      "sdk" : "macosx12.3",
+      "sdkVariant" : "macos",
+      "supportedArchitectures" : [
+        "x86_64h",
+        "x86_64"
+      ],
+      "targetArchitecture" : "x86_64"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "/Users/miia/Programming/C++ Progs/Introduction to C++/Hello_Fltk/DerivedData/Hello_Fltk/Index/Build/Intermediates.noindex",
+      "buildProductsPath" : "/Users/miia/Programming/C++ Progs/Introduction to C++/Hello_Fltk/DerivedData/Hello_Fltk/Index/Build/Products",
+      "derivedDataPath" : "/Users/miia/Programming/C++ Progs/Introduction to C++/Hello_Fltk/DerivedData",
+      "indexDataStoreFolderPath" : "/Users/miia/Programming/C++ Progs/Introduction to C++/Hello_Fltk/DerivedData/Hello_Fltk/Index/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/miia/Programming/C++ Progs/Introduction to C++/Hello_Fltk/DerivedData/Hello_Fltk/Index/PrecompiledHeaders",
+      "pchPath" : "/Users/miia/Programming/C++ Progs/Introduction to C++/Hello_Fltk/DerivedData/Hello_Fltk/Index/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName" : "Debug",
+    "overrides" : {
+      "synthesized" : {
+        "table" : {
+          "ENABLE_PREVIEWS" : "NO",
+          "INDEX_ARENA_INFO_REGULAR_BUILD_PRODUCTS_DIR" : "/Users/miia/Programming/C++ Progs/Introduction to C++/Hello_Fltk/DerivedData/Hello_Fltk/Build/Products",
+          "ONLY_ACTIVE_ARCH" : "YES"
+        }
+      }
+    }
+  },
+  "qos" : "utility",
+  "schemeCommand" : "launch",
+  "schemeCommand2" : "launch",
+  "shouldCollectMetrics" : false,
+  "showNonLoggedProgress" : true,
+  "useDryRun" : false,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}
