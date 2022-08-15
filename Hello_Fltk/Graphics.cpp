@@ -136,11 +136,11 @@ Generic_window::Generic_window(Point tl, int w, int h, const char *l = nullptr) 
     this->callback(static_exit_callback,this);
 }
 
-// add to window
+// attach widget to the window
 void Generic_window::attach(Widget& w)
 {
-    add(&w);
-    w.attach(this);
+    add(&w);         // add widget to the window
+    w.attach(this);  // attach the window to the widget
 }
 
 // override show
@@ -173,7 +173,7 @@ Simple_window::Simple_window(Point tl, int w, int h, const char *l = nullptr) : 
     add(*b);
 }
 
-// redefinition of attach
+// override of Generic_window::attach
 void Simple_window::attach(Fl_Widget& w)
 {
     Generic_window::attach(w);
@@ -188,6 +188,7 @@ void Simple_window::attach(Widget& w)
     add(*b);
 }
 
+// helper methods
 void Simple_window::wait_for_button()
 {
     redraw();
@@ -216,13 +217,7 @@ void Widget::redraw()
     Fl::wait(0);
 }
 
-// getter and setter functions
-void Widget::set_transparency(Transparency_type t)
-{
-    set_transparency_widget(t);
-}
-
-// resize functions
+// resize methods
 void Widget::resize_widget(Point a, Point b)
 {
     set_tl(a);
@@ -237,6 +232,7 @@ void Widget::resize_widget(Point p, int w, int h)
     resize(p.x,p.y,w,h);
 }
 
+// other helper methods
 // update top-left and bottom-right corners
 void Widget:: update_tl_br(const Point& p)
 {
@@ -268,7 +264,7 @@ void Shape::move(int dx, int dy)
     show();
 }
 
-// setter and getter functions for
+// setter and getter methods for
 // color, style, font, transparency
 // (call of redraw() might be needed)
 void Shape::set_color(Color_type c)
@@ -311,7 +307,7 @@ void Shape::set_font_shape(Font_type f, int s)
     new_fontsize = s;
 }
 
-// helper functions for FLTK style and font
+// helper methods for FLTK style and font
 void Shape::set_fl_style()
 {
     fl_line_style(line_style,line_width);
@@ -332,6 +328,10 @@ void Shape::set_fl_font()
     fl_font(new_font,new_fontsize);
 }
 
+// only for test purposes, draw a rectangle
+// encompassing the whole shape,
+// can be used to check whether the resize
+// has been called correctly
 void Shape::draw_outline()
 {
     // outline in black
@@ -343,10 +343,13 @@ void Shape::draw_outline()
 // Line
 //
 
+// override Shape::move_shape
 void Line::move_shape(int dx, int dy)
 {
     l.first.x  += dx;  l.first.y += dy;
     l.second.x += dx; l.second.y += dy;
+    // after any update of the line,
+    // resize must be called
     resize_widget(l.first,l.second);
 }
 
@@ -354,35 +357,47 @@ void Line::move_shape(int dx, int dy)
 // Lines
 //
 
+// add a line to the vector of lines
 void Lines::add_line(pair<Point,Point> line)
 {
     pair<Point,Point>* l = new pair<Point,Point>;
     l->first = line.first; l->second = line.second;
     vl.push_back(l);
+    // after any update of the vector of lines
+    // resize must be called
     resize_widget();
 }
 
+// remove the i-th line
+void Lines::remove_line(size_t i)
+{
+    delete vl.at(i);
+    vl.erase(vl.begin()+i);
+    // after any update of the vector of lines
+    // resize must be called
+    resize_widget();
+}
+
+// getter and setter methods
 void Lines::set_line(size_t i, pair<Point,Point> line)
 {
     pair<Point,Point>* l = new pair<Point,Point>;
     l->first = line.first; l->second = line.second;
     delete vl.at(i);
     vl.at(i) = l;
+    // after any update of the vector of lines
+    // resize must be called
     resize_widget();
 }
 
-void Lines::remove_line(size_t i)
-{
-    delete vl.at(i);
-    vl.erase(vl.begin()+i);
-    resize_widget();
-}
-
+// override Widget::resize_widget
 void Lines::resize_widget()
 {
     // nothing to do if empty vector of lines
     if (vl.empty())
         return;
+    // depending on the sizes of the individual lines stored, the
+    // overall size of the widget must be updated
     set_tl(vl[0]->first);
     set_br(vl[0]->second);
     for (auto l : vl) {
@@ -392,12 +407,15 @@ void Lines::resize_widget()
     Widget::resize_widget();
 }
 
+// override Shape::move_shape
 void Lines::move_shape(int dx, int dy)
 {
     for (auto l : vl) {
         l->first.x += dx; l->first.y += dy;
         l->second.x += dx; l->second.y += dy;
     }
+    // after any update of the vector of lines
+    // resize must be called
     resize_widget();
 }
 
@@ -405,30 +423,40 @@ void Lines::move_shape(int dx, int dy)
 // Open_polyline
 //
 
+// add a new point
+void Open_polyline::add_point(Point p)
+{
+    vp.push_back(new Point{p});
+    // after any update of the vector of points
+    // resize must be called
+    resize_widget();
+}
+
+// remove the i-th point
+void Open_polyline::remove_point(size_t i)
+{
+    delete vp.at(i);
+    vp.erase(vp.begin()+i);
+    // after any update of the vector of points
+    // resize must be called
+    resize_widget();
+}
+
+// getter and setter methods
 void Open_polyline::set_point(size_t i, Point pnt)
 {
     Point* p = new Point;
     *p = pnt;
     delete vp.at(i);
     vp.at(i) = p;
-    resize_widget();
-}
-
-void Open_polyline::add_point(Point p)
-{
-    vp.push_back(new Point{p});
-    resize_widget();
-}
-
-void Open_polyline::remove_point(size_t i)
-{
-    delete vp.at(i);
-    vp.erase(vp.begin()+i);
+    // after any update of the vector of points
+    // resize must be called
     resize_widget();
 }
 
 void Open_polyline::draw_shape()
 {
+    // connect each consecutive points
     for (size_t n=0; n < vp.size()-1; n++)
         fl_line(vp[n]->x, vp[n]->y, vp[n+1]->x, vp[n+1]->y);
 }
@@ -438,6 +466,8 @@ void Open_polyline::resize_widget()
     // nothing to do if empty vector of points
     if (vp.empty())
         return;
+    // depending on where the points are, the
+    // overall size of the widget must be updated
     set_tl(*vp[0]);
     set_br(*vp[0]);
     for (auto p : vp)
@@ -451,6 +481,8 @@ void Open_polyline::move_shape(int dx,int dy)
         p->x += dx;
         p->y += dy;
     }
+    // after any update of the vector of points
+    // resize must be called
     resize_widget();
 }
 
@@ -458,6 +490,7 @@ void Open_polyline::move_shape(int dx,int dy)
 // Closed_polyline
 //
 
+// redefine Open_polyline::draw_shape
 void Closed_polyline::draw_shape()
 {
     Open_polyline::draw_shape();
@@ -469,6 +502,7 @@ void Closed_polyline::draw_shape()
 // Polygon
 //
 
+// redefine Closed_polyline::draw_shape
 void Polygon::draw_shape()
 {
     if (!intersect())
@@ -476,6 +510,7 @@ void Polygon::draw_shape()
     else throw runtime_error("Polygon::draw_shape(): Intersections found!");
 }
 
+// detects if there is an intersection
 bool Polygon::intersect()
 {
     // build vector of lines
@@ -519,6 +554,7 @@ bool Polygon::intersect()
     return false;
 }
 
+// given 2 lines tests for intersection
 bool Polygon::lines_intersect(Point& Pa, Point& Pb, Point& Pc, Point& Pd)
 {
     // naive algorithm: standard solution of intersecting lines
@@ -559,6 +595,7 @@ bool Polygon::lines_intersect(Point& Pa, Point& Pb, Point& Pc, Point& Pd)
 // Rectangle
 //
 
+// overridden member methods
 void Rectangle::draw_shape()
 {
     Point tl = get_tl();
@@ -584,6 +621,7 @@ void Rectangle::move_shape(int dx, int dy)
 // Text
 //
 
+// getter and setter methods
 void Text::set_text(const string& s)
 {
     if ((bl.x == 0) && (bl.y == 0))
@@ -598,6 +636,7 @@ void Text::set_bl(Point p)
     resize_text();
 }
 
+// overridden member methods
 void Text::draw_shape()
 {
     set_fl_font();
@@ -613,6 +652,7 @@ void Text::move_shape(int dx,int dy)
     resize_text();
 }
 
+// resize according to text size
 void Text::resize_text()
 {
     int x{0},y{0},w{0},h{0};
@@ -624,6 +664,7 @@ void Text::resize_text()
 // Circle
 //
 
+// getter and setter methods
 void Circle::set_center(Point p)
 {
     c = p;
@@ -636,6 +677,7 @@ void Circle::set_radius(int rr)
     resize_widget(Point{c.x-r,c.y-r},Point{c.x+r,c.y+r});
 }
 
+// overridden member methods
 void Circle::draw_shape()
 {
     Point tl = get_tl();
@@ -653,6 +695,7 @@ void Circle::move_shape(int dx,int dy)
 // Ellipse
 //
 
+// getter and setter methods
 void Ellipse::set_center(Point p)
 {
     c = p;
@@ -671,6 +714,7 @@ void Ellipse::set_minor(int bb)
     resize_widget(Point{c.x-a,c.y-b},Point{c.x+a,c.y+b});
 }
 
+// overridden member methods
 void Ellipse::draw_shape()
 {
     Point tl = get_tl();
@@ -688,8 +732,29 @@ void Ellipse::move_shape(int dx,int dy)
 // Marked polyline
 //
 
+// deletes i-th mark
+void Marked_polyline::remove_mark(size_t i)
+{
+    m.erase(m.begin()+i);
+    resize_widget();
+}
+
+// overridden member methods
+void Marked_polyline::draw_shape()
+{
+    // draw text
+    set_fl_font();
+    draw_text();
+    // final resize for correct sizes
+    resize_widget();
+    restore_fl_font();
+    // draw the supporting polyline
+    Open_polyline::draw_shape();
+}
+
 void Marked_polyline::resize_widget()
 {
+    // resize the open polyline first
     Open_polyline::resize_widget();
     
     // nothing to do if empty points or markers
@@ -727,18 +792,7 @@ void Marked_polyline::resize_widget()
     Widget::resize_widget();
 }
 
-void Marked_polyline::set_mark(size_t i, string mrk)
-{
-    m.at(i) = mrk;
-    resize_widget();
-}
-
-void Marked_polyline::remove_mark(size_t i)
-{
-    m.erase(m.begin()+i);
-    resize_widget();
-}
-
+// draw all the text markers
 void Marked_polyline::draw_text()
 {
     if (get_nb_points() == get_nb_marks())
@@ -752,24 +806,26 @@ void Marked_polyline::draw_text()
     else throw runtime_error("Marked_polyline::draw_text(): Unequal number of points and markers!");
 }
 
-void Marked_polyline::draw_shape()
+
+// getter and setter methods
+void Marked_polyline::set_mark(size_t i, string mrk)
 {
-    set_fl_font();
-    draw_text();
-    resize_widget(); // final resize for correct sizes
-    restore_fl_font();
-    Open_polyline::draw_shape();
+    m.at(i) = mrk;
+    resize_widget();
 }
 
 //
 // Marks
 //
 
+// overridden member methods
 void Marks::draw_shape()
 {
+    // only draw marks
     set_fl_font();
     draw_text();
-    resize_widget(); // final resize for correct sizes
+    // final resize for correct sizes
+    resize_widget();
     restore_fl_font();
 }
 
@@ -777,6 +833,7 @@ void Marks::draw_shape()
 // Image
 //
 
+// constructor
 Image::Image(Point pos, string name) : fn{name}
 {
     fl_register_images();
@@ -792,12 +849,14 @@ Image::Image(Point pos, string name) : fn{name}
     resize_widget(pos,Point{pos.x+img->w(),pos.y+img->h()});
 }
 
+// set visible area
 void Image::set_mask(Point o, int w, int h)
 {
     orig = o;
     resize_widget(get_tl(),Point{get_tl().x+w,get_tl().y+h});
 }
 
+// overridden member methods
 void Image::draw_shape()
 {
     if (cpy) cpy->draw(get_tl().x,get_tl().y);
@@ -815,6 +874,7 @@ void Image::move_shape(int dx,int dy)
 // Function
 //
 
+// constructor
 Function::Function (Function_type f,pair<double,double> rx, double d, pair<double,double> ry,Point p, int lx, double ar) : func{f},x_range{rx},x_step{d},y_range{ry},orig{p},len_x{lx},ratio{ar}
 {
     // y-axis length
@@ -828,12 +888,14 @@ Function::Function (Function_type f,pair<double,double> rx, double d, pair<doubl
     resize_widget();
 }
 
+// virtual destructor
 Function::~Function()
 {
     for (auto p : vp) delete p;
     for (auto l : labels) delete l;
 }
 
+// add a label
 void Function::add_label(double x,string txt,int dx,int dy)
 {
     // add text to the labels array
@@ -845,6 +907,31 @@ void Function::add_label(double x,string txt,int dx,int dy)
     update_tl_br(Point{label->get_tl()});
     update_tl_br(Point{label->get_br()});
     resize_widget();
+}
+
+// overridden member methods
+void Function::draw_shape()
+{
+    // draw the function
+    for (size_t n=0; n<x.size()-1; n++) {
+        // only draw if the function is in the desired range
+        if ( ((y[n]<y_max) && (y[n]>y_min)) &&
+             ((y[n+1]<y_max) && (y[n+1]>y_min)) )
+            fl_line(vp[n]->x,vp[n]->y,vp[n+1]->x,vp[n+1]->y);
+    }
+    // draw the labels
+    for (auto label:labels) label->draw();
+}
+
+void Function::move_shape(int dx,int dy)
+{
+    for (auto p : vp) {
+        p->x += dx;
+        p->y += dy;
+    }
+    for (auto label:labels) label->move(dx,dy);
+    resize_widget(Point{get_tl().x+dx,get_tl().y+dy},
+                 Point{get_br().x+dx,get_br().y+dy});
 }
 
 // calculates the function values
@@ -864,7 +951,7 @@ void Function::calculate_y()
     y_max = y_range.second;
 }
 
-// calculate points
+// calculate actual points to be drawn
 void Function::calculate_points()
 {
     // scale factors for the x- and y-axis
@@ -880,32 +967,11 @@ void Function::calculate_points()
     set_br(Point{orig.x+int(round(x_max*sx)),orig.y-int(round(y_min*sy))});
 }
 
-void Function::draw_shape()
-{
-    for (size_t n=0; n<x.size()-1; n++) {
-        // only draw if the function is in the desired range
-        if ( ((y[n]<y_max) && (y[n]>y_min)) &&
-             ((y[n+1]<y_max) && (y[n+1]>y_min)) )
-            fl_line(vp[n]->x,vp[n]->y,vp[n+1]->x,vp[n+1]->y);
-    }
-    for (auto label:labels) label->draw();
-}
-
-void Function::move_shape(int dx,int dy)
-{
-    for (auto p : vp) {
-        p->x += dx;
-        p->y += dy;
-    }
-    for (auto label:labels) label->move(dx,dy);
-    resize_widget(Point{get_tl().x+dx,get_tl().y+dy},
-                 Point{get_br().x+dx,get_br().y+dy});
-}
-
 //
 // XAxis
 //
 
+// constructor
 XAxis::XAxis(pair<double,double> rx,double d,Point p,int lx,int ln) :
 x_range{rx}, x_step{d},orig{p},len_x{lx},len_n{ln}
 {
@@ -920,6 +986,7 @@ x_range{rx}, x_step{d},orig{p},len_x{lx},len_n{ln}
     axis.set_line({ Point{get_tl().x,orig.y},Point{get_br().x,orig.y} });
 }
 
+// add label
 void XAxis::add_label(double x,string txt,int dx,int dy)
 {
     // add text to the labels array
@@ -933,12 +1000,38 @@ void XAxis::add_label(double x,string txt,int dx,int dy)
     resize_widget();
 }
 
+// overridden member methods
+void XAxis::draw_shape()
+{
+    axis.draw();
+    notches.draw();
+    for (auto label:labels) label->draw();
+}
+
+void XAxis::move_shape(int dx,int dy)
+{
+    axis.move(dx,dy);
+    notches.move(dx,dy);
+    for (auto label:labels) label->move(dx,dy);
+    resize_widget(Point{get_tl().x+dx,get_tl().y+dy},
+                  Point{get_br().x+dx,get_br().y+dy});
+}
+
+void XAxis::set_color_shape(Color_type c)
+{
+    axis.set_color(c);
+    notches.set_color(c);
+    for (auto label:labels) label->set_color(c);
+}
+
+// determine notches positions
 void XAxis::calculate_x()
 {
     x_min = x_range.first;
     x_max = x_range.second;
     // sanity check on x-range
-    if (x_max<x_min) throw runtime_error("XAxis::calculate_x(): xmax cannot be less than xmin!");
+    if (x_max<x_min)
+        throw runtime_error("XAxis::calculate_x(): xmax cannot be less than xmin!");
     double xx = x_min;
     x.push_back(xx);
     while (xx < x_max) {
@@ -947,6 +1040,7 @@ void XAxis::calculate_x()
     }
 }
 
+// calculate notches lines
 void XAxis::calculate_notches()
 {
     // scale factor for the x-axis
@@ -964,33 +1058,11 @@ void XAxis::calculate_notches()
     set_br(Point{orig.x+int(round(x_max*sx)),orig.y+len_n});
 }
 
-void XAxis::draw_shape()
-{
-    axis.draw();
-    notches.draw();
-    for (auto label:labels) label->draw();
-}
-
-void XAxis::move_shape(int dx,int dy)
-{
-    axis.move(dx,dy);
-    notches.move(dx,dy);
-    for (auto label:labels) label->move(dx,dy);
-    resize_widget(Point{get_tl().x+dx,get_tl().y+dy},
-                 Point{get_br().x+dx,get_br().y+dy});
-}
-
-void XAxis::set_color_shape(Color_type c)
-{
-    axis.set_color(c);
-    notches.set_color(c);
-    for (auto label:labels) label->set_color(c);
-}
-
 //
 // YAxis
 //
 
+// constructor
 YAxis::YAxis(pair<double,double> ry,double d,Point p,int ly,int ln) :
 y_range{ry}, y_step{d},orig{p},len_y{ly},len_n{ln}
 {
@@ -1005,6 +1077,7 @@ y_range{ry}, y_step{d},orig{p},len_y{ly},len_n{ln}
     axis.set_line({ Point{orig.x,get_tl().y},Point{orig.x,get_br().y} });
 }
 
+// add label
 void YAxis::add_label(double y,string txt,int dx,int dy)
 {
     // add text to the labels array
@@ -1018,12 +1091,38 @@ void YAxis::add_label(double y,string txt,int dx,int dy)
     resize_widget();
 }
 
+// overridden member methods
+void YAxis::draw_shape()
+{
+    axis.draw();
+    notches.draw();
+    for (auto label:labels) label->draw();
+}
+
+void YAxis::move_shape(int dx,int dy)
+{
+    axis.move(dx,dy);
+    notches.move(dx,dy);
+    for (auto label:labels) label->move(dx,dy);
+    resize_widget(Point{get_tl().x+dx,get_tl().y+dy},
+                  Point{get_br().x+dx,get_br().y+dy});
+}
+
+void YAxis::set_color_shape(Color_type c)
+{
+    axis.set_color(c);
+    notches.set_color(c);
+    for (auto label:labels) label->set_color(c);
+}
+
+// determine notches positions
 void YAxis::calculate_y()
 {
     y_min = y_range.first;
     y_max = y_range.second;
     // sanity check on x-range
-    if (y_max<y_min) throw runtime_error("YAxis::calculate_y(): ymax cannot be less than ymin!");
+    if (y_max<y_min)
+        throw runtime_error("YAxis::calculate_y(): ymax cannot be less than ymin!");
     double yy = y_min;
     y.push_back(yy);
     while (yy < y_max) {
@@ -1032,6 +1131,7 @@ void YAxis::calculate_y()
     }
 }
 
+// calculate notches lines
 void YAxis::calculate_notches()
 {
     // scale factor for the y-axis
@@ -1049,33 +1149,11 @@ void YAxis::calculate_notches()
     set_br(Point{orig.x+len_n,orig.y-int(round(y_max*sy)),});
 }
 
-void YAxis::draw_shape()
-{
-    axis.draw();
-    notches.draw();
-    for (auto label:labels) label->draw();
-}
-
-void YAxis::move_shape(int dx,int dy)
-{
-    axis.move(dx,dy);
-    notches.move(dx,dy);
-    for (auto label:labels) label->move(dx,dy);
-    resize_widget(Point{get_tl().x+dx,get_tl().y+dy},
-                 Point{get_br().x+dx,get_br().y+dy});
-}
-
-void YAxis::set_color_shape(Color_type c)
-{
-    axis.set_color(c);
-    notches.set_color(c);
-    for (auto label:labels) label->set_color(c);
-}
-
 //
 // Button
 //
 
+// constructor
 Button::Button(Point p,int w,int h,const string s,Callback_type cb,void *d)
 {
     text = s;
@@ -1091,20 +1169,7 @@ Button::Button(Point p,int w,int h,const string s,Callback_type cb,void *d)
     else throw runtime_error("Button::Button(): Button allocation failed!");
 }
 
-void Button::set_when(When_type w)
-{
-    hide();
-    fl_when = to_fl_when(w);
-    show();
-}
-
-void Button::set_button(Button_type b)
-{
-    hide();
-    fl_button = to_fl_button(b);
-    show();
-}
-
+// overridden member methods
 void Button::draw()
 {
     b->type(fl_button);
@@ -1124,10 +1189,26 @@ void Button::move(int dx, int dy)
     show();
 }
 
+// setter and getter functions
+void Button::set_when(When_type w)
+{
+    hide();
+    fl_when = to_fl_when(w);
+    show();
+}
+
+void Button::set_button(Button_type b)
+{
+    hide();
+    fl_button = to_fl_button(b);
+    show();
+}
+
 //
 // In_box
 //
 
+// constructor
 In_box::In_box(Point p,int w,int h,const string s)
 {
     text = s;
@@ -1141,6 +1222,7 @@ In_box::In_box(Point p,int w,int h,const string s)
     else throw runtime_error("In_box::In_box(): In_box allocation failed!");
 }
 
+// overridden member methods
 void In_box::draw()
 {
     in->label(text.c_str());
@@ -1160,6 +1242,7 @@ void In_box::move(int dx, int dy)
 // Out_box
 //
 
+// constructor
 Out_box::Out_box(Point p,int w,int h,const string s)
 {
     text = s;
@@ -1172,6 +1255,7 @@ Out_box::Out_box(Point p,int w,int h,const string s)
     else throw runtime_error("Out_box::Out_box(): Out_box allocation failed!");
 }
 
+// overridden member methods
 void Out_box::draw()
 {
     out->label(text.c_str());
@@ -1192,9 +1276,12 @@ void Out_box::move(int dx, int dy)
 // Menu
 //
 
+// add new selection button
 void Menu::add_button(Button *b)
 {
+    // add it to the selections
     selection.push_back(b);
+    // locate the button
     if (type == Menu_type::horizontal)
     {
         b->Widget::move(Point{get_tl().x+width,get_tl().y});
@@ -1209,13 +1296,33 @@ void Menu::add_button(Button *b)
         if (b->get_w() > width)
             width = b->get_w();
     }
+    // resize the whole widget
     resize_widget(get_tl(),width,height);
 }
 
+// attach Menu widget and its button to the window
 void Menu::attach(Generic_window* w)
 {
+    // attach the Menu widget to the window
     Widget::attach(w);
+    // attach each selection button to the window
     for (auto b:selection) w->attach(*b);
+}
+
+// deallocate all selection buttons
+void Menu::destroy()
+{
+    for (auto b:selection)
+        if (b) delete(b);
+}
+
+// overridden member methods
+void Menu::draw()
+{
+    if (is_visible())
+        for (auto b:selection) b->set_transparency(Transparency_type::visible);
+    else
+        for (auto b:selection) b->set_transparency(Transparency_type::invisible);
 }
 
 void Menu::move(int dx, int dy)
@@ -1223,20 +1330,6 @@ void Menu::move(int dx, int dy)
     for (auto b:selection)
         b->move(dx,dy);
     resize_widget(Point{get_tl().x+dx,get_tl().y+dy},width,height);
-}
-
-void Menu::destroy()
-{
-    for (auto b:selection)
-        if (b) delete(b);
-}
-
-void Menu::draw()
-{
-    if (is_visible())
-        for (auto b:selection) b->set_transparency(Transparency_type::visible);
-    else
-        for (auto b:selection) b->set_transparency(Transparency_type::invisible);
 }
 
 } // namespace mathsophy::graphics

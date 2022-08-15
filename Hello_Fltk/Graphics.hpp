@@ -224,7 +224,7 @@ public:
     Generic_window(Point tl, int w, int h, const char *l);
     // virtual destructor
     virtual ~Generic_window() { clear(); }
-    // add to window
+    // attach to window
     virtual void attach(Fl_Widget& w) { add(w); }
     virtual void attach(Widget& w);
     // remove from window
@@ -243,7 +243,7 @@ public:
     // wait for window close
     void wait_for_exit();
     // maximum x and y
-    int x_max() { return  w(); }
+    int x_max() { return w(); }
     int y_max() { return h(); }
 };
 
@@ -258,7 +258,7 @@ public:
     Simple_window(Point tl, int w, int h, const char *l);
     // virtual destructor
     virtual ~Simple_window() { delete b; }
-    // redefinition of attach
+    // override of attach
     void attach(Fl_Widget& w);
     void attach(Widget& w);
     // callbacks
@@ -266,11 +266,11 @@ public:
     static void static_next_callback(Fl_Widget *w, void *win) {
         static_cast<Simple_window *>(win)->next_callback(w);
     }
-    // helper functions
+    // helper methods
     void wait_for_button();
     bool is_button_pressed();
 private:
-    Fl_Button* b;
+    Fl_Button* b; // the Next button that appears top right
     bool button_pressed = false;
 };
 
@@ -287,39 +287,47 @@ public:
     Widget& operator=(const Widget&) = delete;
     // virtual destructor
     virtual ~Widget() {}
+    // virtual draw() method to be provided by
+    // the derived class, overrides Fl_Widget::draw
     virtual void draw() = 0;
+    // virtual move() method to be provided by
+    // the derived class
     virtual void move(int dx, int dy) = 0;
     virtual void move(Point p) { move(p.x-get_tl().x,p.y-get_tl().y ); }
     // overrides Fl_Widget::redraw()
     void redraw();
     // attach internal FLTK widgets to the window
     virtual void attach(Generic_window* w) { win = w; }
-    // getter and setter functions
+    // getter and setter methods
     Generic_window* get_win() const { return win; }
-    void set_transparency(Transparency_type t);
+    void set_transparency(Transparency_type t) { set_transparency_widget(t); }
     Transparency_type get_transparency() const { return trans; }
-    bool is_visible() { return (trans == Transparency_type::visible); }
     int get_w() const {return (br.x-tl.x); }
     int get_h() const {return (br.y-tl.y); }
     Point get_tl() const  { return tl; }
     Point get_br() const  { return br; }
+    // helper methods
+    bool is_visible() { return (trans == Transparency_type::visible); }
 protected:
     // Widget is an abstract class, no instances of Widget can be created!
     Widget() : Fl_Widget(0,0,0,0) {}
-    void set_transparency_widget(Transparency_type t) { trans = t; }
-    // resize functions
+    // resize methods to be overridden by derived classes
     virtual void resize_widget(Point a, Point b);
     virtual void resize_widget(Point p, int w, int h);
+    // call Fl_Widget::resize
     virtual void resize_widget() { resize(tl.x,tl.y,br.x-tl.x,br.y-tl.y); }
-    // other helper functions
-    void  set_tl(Point p) { tl = p; }
-    void  set_br(Point p) { br = p; }
-    void  update_tl_br(const Point& p);
+    // protected setter methods
+    void set_transparency_widget(Transparency_type t) { trans = t; }
+    void set_tl(Point p) { tl = p; }
+    void set_br(Point p) { br = p; }
+    // other helper methods
+    // update top-left and bottom-right corners
+    void update_tl_br(const Point& p);
 private:
     Transparency_type trans{Transparency_type::visible};
     Point tl{};                       // top-left corner
     Point br{};                       // bottom-right corner
-    Generic_window *win;
+    Generic_window *win;              // pointer to the containing window
 };
 
 //
@@ -341,7 +349,7 @@ public:
     // top-left corner (call of redraw()
     // might be needed)
     void move(int dx, int dy);
-    // setter and getter functions for
+    // setter and getter methods for
     // color, style, font, transparency
     // (call of redraw() might be needed)
     void set_color(Color_type c);
@@ -353,10 +361,11 @@ public:
 protected:
     // Shape is an abstract class, no instances of Shape can be created!
     Shape() : Widget() {}
-    // protected virtual functions to be overridden
+    // protected virtual methods to be overridden
     // by derived classes
     virtual void draw_shape() = 0;
     virtual void move_shape(int dx, int dy) = 0;
+    // protected setter methods
     virtual void set_color_shape(Color_type c) {
         new_color = to_fl_color(c);
     }
@@ -365,11 +374,12 @@ protected:
     }
     virtual void set_style_shape(Style_type s, int w);
     virtual void set_font_shape(Font_type f, int s);
-    // helper functions for FLTK style and font
+    // helper methods for FLTK style and font
     void set_fl_style();
     void restore_fl_style();
     void set_fl_font();
     void restore_fl_font() { fl_font(old_font,old_fontsize); }
+    // test method for checking resize calls
     void draw_outline();
 private:
     Fl_Color new_color{Fl_Color()};   // color
@@ -396,15 +406,15 @@ public:
     }
     // virtual destructor
     virtual ~Line() {}
-    // getter and setter functions
+    // getter and setter methods
     pair<Point,Point> get_line() const { return l; }
     void set_line(pair<Point,Point> line) { l = line; }
 protected:
-    // overridden member functions
+    // overridden member methods
     void draw_shape() { fl_line(l.first.x, l.first.y, l.second.x, l.second.y); }
     void move_shape(int dx, int dy);
 private:
-    pair<Point,Point> l; // a line as a pair of points
+    pair<Point,Point> l; // a line is a pair of points
 };
 
 //
@@ -414,23 +424,31 @@ private:
 class Lines : public Shape
 {
 public:
+    // constructors
     Lines() {}
     Lines(initializer_list< pair<Point,Point> > lst) {
         for (auto line : lst) add_line(line);
     }
+    // virtual destructor
     virtual ~Lines() { for (auto l: vl) delete l; }
-    size_t get_nb_lines() const { return vl.size(); }
-    bool empty_lines() const { return vl.empty(); }
+    // add a line to the vector of lines
     void add_line(pair<Point,Point> line);
+    // remove the i-th line
+    void remove_line(size_t i);
+    // getter and setter methods
     pair<Point,Point> get_line(size_t i) const { return *vl.at(i); }
     void set_line(size_t i, pair<Point,Point> line);
-    void remove_line(size_t i);
+    // helper methods
+    size_t get_nb_lines() const { return vl.size(); }
+    bool empty_lines() const { return vl.empty(); }
 protected:
+    // overridden member methods
     void draw_shape() { for (auto l: vl) fl_line(l->first.x, l->first.y, l->second.x, l->second.y); }
-    void resize_widget();
     void move_shape(int dx, int dy);
+    void resize_widget();
 private:
-    vector< pair<Point,Point>* > vl;
+    vector< pair<Point,Point>* > vl; // vector of lines where a line is
+                                     // defined by a pair of points
 };
 
 //
@@ -440,23 +458,30 @@ private:
 class Open_polyline : public Shape
 {
 public:
+    // constructors
     Open_polyline() {}
     Open_polyline(initializer_list<Point> lst) {
         for (auto pnt : lst) add_point(pnt);
     }
-    virtual ~Open_polyline() { for (auto pnt: vp) delete pnt; }
-    size_t get_nb_points() const { return vp.size(); }
-    bool empty_points() const { return vp.empty(); }
-    Point get_point(size_t i) const { return *vp.at(i); }
-    void set_point(size_t i, Point pnt);
+    // virtual destructor
+    virtual ~Open_polyline()        { for (auto pnt: vp) delete pnt; }
+    // add a new point 
     void add_point(Point p);
+    // remove the i-th point
     void remove_point(size_t i);
+    // getter and setter methods
+    Point get_point(size_t i) const { return *vp.at(i);  }
+    void set_point(size_t i, Point pnt);
+    // helper methods
+    size_t get_nb_points() const    { return vp.size();  }
+    bool empty_points() const       { return vp.empty(); }
 protected:
+    // overridden member methods
     void draw_shape();
-    void resize_widget();
     void move_shape(int dx,int dy);
+    void resize_widget();
 private:
-    vector<Point*> vp;
+    vector<Point*> vp; // vector of points to be connected
 };
 
 //
@@ -468,8 +493,10 @@ class Closed_polyline : public Open_polyline
 public:
     // use the constructors of Open_polyline
     using Open_polyline::Open_polyline;
+    // virtual destructor
     virtual ~Closed_polyline() {}
 protected:
+    // redefine Open_polyline::draw_shape
     void draw_shape();
 };
 
@@ -482,11 +509,15 @@ class Polygon : public Closed_polyline
 public:
     // use the constructors of Closed_polyline
     using Closed_polyline::Closed_polyline;
+    // virtual destructor
     virtual ~Polygon() {}
 protected:
+    // redefine Closed_polyline::draw_shape
     void draw_shape();
 private:
+    // detects if there is an intersection
     bool intersect();
+    // given 2 lines tests for intersection
     bool lines_intersect(Point&,Point&,Point&,Point&);
 };
 
@@ -497,19 +528,23 @@ private:
 class Rectangle : public Shape
 {
 public:
+    // constructors
     Rectangle(Point a, int w, int h) { resize_widget(a,Point{a.x+w,a.y+h});}
-    Rectangle(Point a, Point b) { resize_widget(a,b); }
+    Rectangle(Point a, Point b)      { resize_widget(a,b); }
+    // virtual destructor
     virtual ~Rectangle() {}
+    // getter and setter methods
     void set_outline(bool flag) { outline = flag; }
-    bool get_outline() const { return outline; }
-    void set_filled(bool flag) { filled = flag; }
-    bool get_filled() const { return filled; }
+    bool get_outline() const    { return outline; }
+    void set_filled(bool flag)  { filled = flag;  }
+    bool get_filled() const     { return filled;  }
 protected:
+    // overridden member methods
     void draw_shape();
     void move_shape(int dx, int dy);
 private:
-    bool outline{true};
-    bool filled{true};
+    bool outline{true}; // outline must be drawn
+    bool filled{true};  // inside must be color filled
 };
 
 //
@@ -519,23 +554,28 @@ private:
 class Text : public Shape
 {
 public:
+    // constructors
     Text() {}
     Text(Point a, const string& s) : bl{a}, t{s} {
         // resize once else the text is not shown
         resize_text();
     }
+    // virtual destructor
     virtual ~Text() {}
-    void set_text(const string& s);
+    // getter and setter methods
+    void   set_text(const string& s);
     string get_text(void) const { return t; }
-    void set_bl(Point p);
-    Point get_bl() const { return bl; }
+    void   set_bl(Point p);
+    Point  get_bl() const { return bl; }
 protected:
+    // overridden member methods
     void draw_shape();
     void move_shape(int dx,int dy);
+    // resize according to text size
     void resize_text();
 private:
     Point bl{}; // bottom left corner
-    string t{};
+    string t{}; // text as a string
 };
 
 //
@@ -545,15 +585,19 @@ private:
 class Circle : public Shape
 {
 public:
+    // constructors
     Circle(Point a, int rr) : c{a}, r{rr} {
         resize_widget(Point{c.x-r,c.y-r}, Point{c.x+r,c.y+r});
     }
+    // virtual destructor
     virtual ~Circle() {}
+    // getter and setter methods
     Point get_center() const { return c; }
-    void set_center(Point p);
-    int get_radius() const { return r; }
-    void set_radius(int rr);
+    void  set_center(Point p);
+    int   get_radius() const { return r; }
+    void  set_radius(int rr);
 protected:
+    // overridden member methods
     void draw_shape();
     void move_shape(int dx,int dy);
 private:
@@ -568,17 +612,21 @@ private:
 class Ellipse : public Shape
 {
 public:
+    // constructors
     Ellipse(Point cc, int aa, int bb) : c{cc}, a{aa}, b{bb} {
         resize_widget(Point{c.x-a,c.y-b},Point{c.x+a,c.y+b});
     }
+    // virtual destructor
     virtual ~Ellipse() {}
+    // getter and setter methods
     Point get_center() const { return c; }
-    void set_center(Point p);
-    int get_major()  const { return a; }
-    void set_major(int aa);
-    int get_minor()  const { return b; }
-    void set_minor(int bb);
+    void  set_center(Point p);
+    int   get_major()  const { return a; }
+    void  set_major(int aa);
+    int   get_minor()  const { return b; }
+    void  set_minor(int bb);
 protected:
+    // overridden member methods
     void draw_shape();
     void move_shape(int dx,int dy);
 private:
@@ -594,6 +642,7 @@ private:
 class Marked_polyline : public Open_polyline
 {
 public:
+    // constructors
     Marked_polyline(const vector<string>& mm={""}) : m{mm}, Open_polyline() {
         if ( (m.size() == 1) && (m[0] == "") )
             m[0] = "*";
@@ -602,16 +651,22 @@ public:
         if ( (m.size() == 1) && (m[0] == "") )
             m[0] = "*";
     }
+    // virtual destructor
     virtual ~Marked_polyline() {}
-    size_t get_nb_marks() const { return m.size(); }
-    bool empty_marks() const { return m.empty(); }
-    string get_mark(size_t i) const { return m.at(i); }
-    void set_mark(size_t i, string mrk);
+    // deletes i-th mark
     void remove_mark(size_t i);
+    // getter and setter methods
+    string get_mark(size_t i) const { return m.at(i); }
+    void   set_mark(size_t i, string mrk);
+    // helper methods
+    size_t get_nb_marks() const     { return m.size(); }
+    bool empty_marks() const { return m.empty(); }
 protected:
-    void draw_text();
+    // overridden member methods
     void draw_shape();
     void resize_widget();
+    // draw all the text markers
+    void draw_text();
 private:
     vector<string> m; // vector of marks
 };
@@ -623,11 +678,14 @@ private:
 class Marks : public Marked_polyline
 {
 public:
+    // constructors
     Marks(string m="") : Marked_polyline({m}) {}
     Marks(const vector<string>& m, initializer_list<Point> lst) : Marked_polyline(m,lst) {}
     Marks(string m, initializer_list<Point> lst) : Marked_polyline({m},lst) {}
+    // virtual destructor
     virtual ~Marks() {}
 protected:
+    // overridden member methods
     void draw_shape();
 };
 
@@ -638,7 +696,9 @@ protected:
 class Mark : public Marks
 {
 public:
+    // constructor
     Mark(Point p,char c) : Marks({string{1,c}},{p}) {}
+    // virtual destructor
     virtual ~Mark() {}
 };
 
@@ -649,21 +709,27 @@ public:
 class Image : public Shape
 {
 public:
+    // constructors
     Image(Point pos, string name);
+    // virtual destructor
     virtual ~Image() { if (img) img->release(); }
+    // set visible area
     void set_mask(Point o, int w, int h);
+    // scale the image
     void scale(int w, int h) { cpy = img->copy(w,h);
         resize_widget(get_tl(),Point{get_tl().x+w,get_tl().y+h});
     }
+    // getter and setter methods
     Point get_orig() const { return orig; }
 protected:
+    // overridden member methods
     void draw_shape();
     void move_shape(int dx,int dy);
 private:
-    Fl_Shared_Image *img{nullptr};
-    Fl_Image *cpy{nullptr};
-    string fn{};
-    Point orig{};
+    Fl_Shared_Image *img{nullptr}; // FLTK image pointer
+    Fl_Image *cpy{nullptr};        // scaled image
+    string fn{};                   // file name
+    Point orig{};                  // origin
 };
 
 //
@@ -673,36 +739,41 @@ private:
 class Function : public Shape
 {
 public:
+    // constructor
     Function (Function_type f,pair<double,double> rx, double d, pair<double,double> ry,Point p, int lx, double ar=1);
+    // virtual destructor
     virtual ~Function();
-    Point get_orig() const { return orig; }
+    // add a label
     void add_label(double x,string txt,int dx=0,int dy=0);
-    vector<Text*> labels;
+    // getter and setter methods
+    Point get_orig() const { return orig; }
+    vector<Text*> labels; // public vector of labels
 protected:
-    // calculates the function values
-    void calculate_y();
-    // calculate points
-    void calculate_points();
+    // overridden member methods
     void draw_shape();
     void move_shape(int dx,int dy);
+    // calculates the function values
+    void calculate_y();
+    // calculate actual points to be drawn
+    void calculate_points();
 private:
-    Function_type func;
-    vector<double> y;
-    vector<double> x;
-    vector<Point*> vp;
-    pair<double,double> x_range{0,0}; // [x_min,x_max)
-    pair<double,double> y_range{0,0}; // (y_min,y_max)
-    Point orig{};
-    int len_x{0};     // x-axis length in pixels
-    int len_y{0};     // y-axis length in pixels
-    double x_min{0};
-    double x_max{0};
-    double x_step{0}; // x increment
-    double y_min{0};
-    double y_max{0};
-    double sx{0};
-    double sy{0};
-    double ratio{0};
+    Function_type func;                // function
+    vector<double> y;                  // function values
+    vector<double> x;                  // domain values
+    vector<Point*> vp;                 // actual points to be drawn
+    pair<double,double> x_range{0,0};  // [x_min,x_max)
+    pair<double,double> y_range{0,0};  // (y_min,y_max)
+    Point orig{};                      // origin
+    int len_x{0};                      // x-axis length in pixels
+    int len_y{0};                      // y-axis length in pixels
+    double x_min{0};                   // minimum abscissa
+    double x_max{0};                   // maximum abscissa
+    double x_step{0};                  // x increment
+    double y_min{0};                   // minimum function value
+    double y_max{0};                   // maximum function value
+    double sx{0};                      // scale factor for the x-axis
+    double sy{0};                      // scale factor for the y-axis
+    double ratio{0};                   // aspect ratio
 };
 
 //
@@ -712,30 +783,38 @@ private:
 class XAxis : public Shape
 {
 public:
+    // constructor
     XAxis(pair<double,double> rx, double d, Point p, int lx, int ln=5);
+    // virtual destructor
     virtual ~XAxis() { for (auto l : labels) delete l; }
-    int pos(double x) { return orig.x + int(round(x*sx)); }
+    // add label
     void add_label(double x, string txt, int dx=0, int dy=0);
+    // getter and setter methods
     Point get_orig() const { return orig; }
-    vector<Text*> labels;
-    Lines notches;
-    Line axis;
+    // helper methods
+    int pos(double x) { return orig.x + int(round(x*sx)); }
+    vector<Text*> labels;   // vector of labels
+    Lines notches;          // lines representing the notches
+    Line axis;              // single axis line
 protected:
-    void calculate_x();
-    void calculate_notches();
+    // overridden member methods
     void draw_shape();
     void move_shape(int dx, int dy);
     void set_color_shape(Color_type c);
+    // determine notches positions
+    void calculate_x();
+    // calculate notches lines
+    void calculate_notches();
 private:
-    Point orig{};
-    pair<double,double> x_range{0,0}; // [x_min,x_max)
-    vector<double> x;
-    int len_x{0};     // x-axis length in pixels
-    int len_n{0};     // notch length in pixels
-    double x_min{0};
-    double x_max{0};
-    double x_step{0}; // x increment
-    double sx{0};     // scale factor
+    Point orig{};                      // origin
+    pair<double,double> x_range{0,0};  // [x_min,x_max)
+    vector<double> x;                  // position of every notch
+    int len_x{0};                      // x-axis length in pixels
+    int len_n{0};                      // notch length in pixels
+    double x_min{0};                   // minimum abscissa
+    double x_max{0};                   // maximum abscissa
+    double x_step{0};                  // x increment
+    double sx{0};                      // scale factor for the x-axis
 };
 
 //
@@ -745,30 +824,38 @@ private:
 class YAxis : public Shape
 {
 public:
+    // constructor
     YAxis(pair<double,double> ry, double d, Point p, int ly, int ln=5);
+    // virtual destructor
     virtual ~YAxis() { for (auto l : labels) delete l; }
-    int pos(double y) { return orig.y - int(round(y*sy)); }
+    // add label
     void add_label(double y,string txt,int dx=0,int dy=0);
+    // getter and setter methods
     Point get_orig() const { return orig; }
-    vector<Text*> labels;
-    Lines notches;
-    Line axis;
+    // helper methods
+    int pos(double y) { return orig.y - int(round(y*sy)); }
+    vector<Text*> labels;   // vector of labels
+    Lines notches;          // lines representing the notches
+    Line axis;              // single axis line
 protected:
-    void calculate_y();
-    void calculate_notches();
+    // overridden member methods
     void draw_shape();
     void move_shape(int dx, int dy);
     void set_color_shape(Color_type c);
+    // determine notches positions
+    void calculate_y();
+    // calculate notches lines
+    void calculate_notches();
 private:
-    Point orig{};
-    pair<double,double> y_range{0,0}; // [y_min,y_max)
-    vector<double> y;
-    int len_y{0};     // y-axis length in pixels
-    int len_n{0};     // notch length in pixels
-    double y_min{0};
-    double y_max{0};
-    double y_step{0}; // y increment
-    double sy{0};     // scale factor
+    Point orig{};                      // origin
+    pair<double,double> y_range{0,0};  // [y_min,y_max)
+    vector<double> y;                  // position of every notch
+    int len_y{0};                      // y-axis length in pixels
+    int len_n{0};                      // notch length in pixels
+    double y_min{0};                   // minimum ordinate
+    double y_max{0};                   // maximum ordinate
+    double y_step{0};                  // y increment
+    double sy{0};                      // scale factor for the y-axis
 };
 
 //
@@ -778,7 +865,9 @@ private:
 class Button : public Widget
 {
 public:
+    // constructor
     Button(Point p, int w, int h, const string s, Callback_type cb, void* d);
+    // virtual destructor
     virtual ~Button() { if (b) delete b; }
     // show button
     void show() { set_transparency(Transparency_type::visible); }
@@ -786,9 +875,8 @@ public:
     void hide() { set_transparency(Transparency_type::invisible); }
     // attach internal button
     void attach(Generic_window* w) { Widget::attach(w); w->add(*b); }
-    // draw
+    // overridden member methods
     void draw();
-    // move
     void move(int dx, int dy);
     // setter and getter functions
     void set_when(When_type w);
@@ -798,11 +886,11 @@ public:
     void set_label(string s) { text = s; }
     string get_label() const { return text; }
 private:
-    Fl_Button *b{nullptr};
-    Fl_When fl_when{FL_WHEN_RELEASE};
-    int fl_button{FL_NORMAL_BUTTON};
-    string text;
-    void *data;
+    Fl_Button *b{nullptr};             // pointer to FLTK button
+    Fl_When fl_when{FL_WHEN_RELEASE};  // when the callback is to be called
+    int fl_button{FL_NORMAL_BUTTON};   // button type
+    string text;                       // text to display on the button
+    void *data;                        // pointer data to the button callback
 };
 
 //
@@ -812,7 +900,9 @@ private:
 class In_box : public Widget
 {
 public:
+    // constructor
     In_box(Point p, int w, int h, const string s);
+    // virtual destructor
     virtual ~In_box() { if (in) delete in; }
     // callback
     static void static_input_callback(Fl_Widget *fl_w, void *widget) {
@@ -825,19 +915,18 @@ public:
     void hide() { set_transparency(Transparency_type::invisible); }
     // attach internal button
     void attach(Generic_window* w) { Widget::attach(w); w->add(in); }
-    // draw
+    // overridden member methods
     void draw();
-    // move
     void move(int dx, int dy);
     // setter and getter functions
-    string get_input_text() { return in_text; }
-    int get_input_integer() { return stoi(in_text); }
-    void set_label(string s) { text = s; }
-    string get_label() const { return text; }
+    string get_input_text()    { return in_text; }
+    int    get_input_integer() { return stoi(in_text); }
+    void   set_label(string s) { text = s; }
+    string get_label() const   { return text; }
 private:
-    Fl_Input *in{nullptr};
-    string in_text{};
-    string text{};
+    Fl_Input *in{nullptr};  // pointer to FLTK input box
+    string in_text{};       // input text
+    string text{};          // label
 };
 
 //
@@ -847,7 +936,9 @@ private:
 class Out_box : public Widget
 {
 public:
+    // constructor
     Out_box(Point p, int w, int h, const string s);
+    // virtual destructor
     virtual ~Out_box() { if (out) delete out; }
     // show button
     void show() { set_transparency(Transparency_type::visible); }
@@ -855,18 +946,17 @@ public:
     void hide() { set_transparency(Transparency_type::invisible); }
     // attach internal button
     void attach(Generic_window* w) { Widget::attach(w); w->add(out); }
-    // draw
+    // overridden member methods
     void draw();
-    // move
     void move(int dx, int dy);
     // setter and getter functions
-    void set_output_text(string s) { out_text = s; }
-    void set_label(string s) { text = s; }
-    string get_label() const { return text; }
+    void   set_output_text(string s) { out_text = s; }
+    void   set_label(string s)       { text = s; }
+    string get_label() const         { return text; }
 private:
-    Fl_Output *out{nullptr};
-    string out_text{};
-    string text{};
+    Fl_Output *out{nullptr};   // pointer to FLTK output box
+    string out_text{};         // output text
+    string text{};             // label
 };
 
 //
@@ -876,29 +966,30 @@ private:
 class Menu : public Widget
 {
 public:
+    // constructor
     Menu(Point p, Menu_type t = Menu_type::vertical,
          int g = 5) : type{t}, gap{g} { resize_widget(p,width,height); }
+    // vistual destructor
     virtual ~Menu() {}
     // show button
     void show() { set_transparency(Transparency_type::visible); }
     // hide button
     void hide() { set_transparency(Transparency_type::invisible); }
-    // attach internal button
+    // attach Menu widget and its button to the window
     void attach(Generic_window* w);
-    // add button
+    // add new selection button
     void add_button(Button *b);
-    // deallocate all buttons
+    // deallocate all selection buttons
     void destroy();
-    // draw
+    // overridden member methods
     void draw();
-    // move
     void move(int dx, int dy);
 private:
-    vector<Button*> selection;
-    Menu_type type;
-    int gap{0};
-    int width{0};
-    int height{0};
+    vector<Button*> selection;     // vector of buttons for the available selections
+    Menu_type type;                // either vertical or horizontal
+    int gap{0};                    // gap between the buttons
+    int width{0};                  // total width
+    int height{0};                 // total height
 };
 
 }
