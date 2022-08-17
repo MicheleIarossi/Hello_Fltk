@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2D1FD510279B67B90018AE95 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D1FD50E279B67B90018AE95 /* Graphics.cpp */; };
+		2DA1605A28AC45AF00FB5C5C /* demoapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA1605928AC45AF00FB5C5C /* demoapp.cpp */; };
 		2DA34A01278789AF000EA90C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA34A00278789AF000EA90C /* main.cpp */; };
 		2DD666F6280B51E000322F2E /* examples.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DD666F4280B51E000322F2E /* examples.cpp */; };
 /* End PBXBuildFile section */
@@ -27,6 +28,8 @@
 /* Begin PBXFileReference section */
 		2D1FD50E279B67B90018AE95 /* Graphics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Graphics.cpp; sourceTree = "<group>"; };
 		2D1FD50F279B67B90018AE95 /* Graphics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Graphics.hpp; sourceTree = "<group>"; };
+		2DA1605828AC3B0600FB5C5C /* demoapp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = demoapp.hpp; sourceTree = "<group>"; };
+		2DA1605928AC45AF00FB5C5C /* demoapp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = demoapp.cpp; sourceTree = "<group>"; };
 		2DA349FD278789AF000EA90C /* Hello_Fltk */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Hello_Fltk; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DA34A00278789AF000EA90C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2DD666F4280B51E000322F2E /* examples.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = examples.cpp; sourceTree = "<group>"; };
@@ -68,6 +71,8 @@
 				2D1FD50F279B67B90018AE95 /* Graphics.hpp */,
 				2DD666F4280B51E000322F2E /* examples.cpp */,
 				2DD666F5280B51E000322F2E /* examples.h */,
+				2DA1605828AC3B0600FB5C5C /* demoapp.hpp */,
+				2DA1605928AC45AF00FB5C5C /* demoapp.cpp */,
 			);
 			path = Hello_Fltk;
 			sourceTree = "<group>";
@@ -131,6 +136,7 @@
 			files = (
 				2D1FD510279B67B90018AE95 /* Graphics.cpp in Sources */,
 				2DA34A01278789AF000EA90C /* main.cpp in Sources */,
+				2DA1605A28AC45AF00FB5C5C /* demoapp.cpp in Sources */,
 				2DD666F6280B51E000322F2E /* examples.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
