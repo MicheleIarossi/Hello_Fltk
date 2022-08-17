@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>676E31F7-8BB6-4491-84A0-BE35F0FEB7EA</key>
+		<key>0BFC3283-B5CC-4BE0-9A35-4E7B69F67B7B</key>
 		<dict>
 			<key>className</key>
 			<string>DBGConsoleLog</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
 			<key>fileName</key>
-			<string>676E31F7-8BB6-4491-84A0-BE35F0FEB7EA.xcactivitylog</string>
+			<string>0BFC3283-B5CC-4BE0-9A35-4E7B69F67B7B.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -32,13 +32,81 @@
 			<key>signature</key>
 			<string>Run Hello_Fltk</string>
 			<key>timeStartedRecording</key>
-			<real>678057571.72612095</real>
+			<real>682379428.78896999</real>
 			<key>timeStoppedRecording</key>
-			<real>678057598.79937506</real>
+			<real>682379432.33791494</real>
 			<key>title</key>
 			<string>Run Hello_Fltk</string>
 			<key>uniqueIdentifier</key>
-			<string>676E31F7-8BB6-4491-84A0-BE35F0FEB7EA</string>
+			<string>0BFC3283-B5CC-4BE0-9A35-4E7B69F67B7B</string>
+		</dict>
+		<key>4D5C213C-4654-4C8F-81D0-9457E1237E08</key>
+		<dict>
+			<key>className</key>
+			<string>DBGConsoleLog</string>
+			<key>documentTypeString</key>
+			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
+			<key>fileName</key>
+			<string>4D5C213C-4654-4C8F-81D0-9457E1237E08.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Hello_Fltk project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Hello_Fltk</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Run Hello_Fltk</string>
+			<key>timeStartedRecording</key>
+			<real>682379335.33273005</real>
+			<key>timeStoppedRecording</key>
+			<real>682379380.30280805</real>
+			<key>title</key>
+			<string>Run Hello_Fltk</string>
+			<key>uniqueIdentifier</key>
+			<string>4D5C213C-4654-4C8F-81D0-9457E1237E08</string>
+		</dict>
+		<key>71E17FDA-6168-4CD1-9904-C91792622A75</key>
+		<dict>
+			<key>className</key>
+			<string>DBGConsoleLog</string>
+			<key>documentTypeString</key>
+			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
+			<key>fileName</key>
+			<string>71E17FDA-6168-4CD1-9904-C91792622A75.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Hello_Fltk project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Hello_Fltk</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Run Hello_Fltk</string>
+			<key>timeStartedRecording</key>
+			<real>682457307.94394696</real>
+			<key>timeStoppedRecording</key>
+			<real>682457326.25750303</real>
+			<key>title</key>
+			<string>Run Hello_Fltk</string>
+			<key>uniqueIdentifier</key>
+			<string>71E17FDA-6168-4CD1-9904-C91792622A75</string>
 		</dict>
 		<key>BB653559-D15A-47AB-8A6A-F59E950BFE94</key>
 		<dict>
@@ -73,6 +141,40 @@
 			<string>Run Hello_Fltk</string>
 			<key>uniqueIdentifier</key>
 			<string>BB653559-D15A-47AB-8A6A-F59E950BFE94</string>
+		</dict>
+		<key>F59EEECD-75AF-4821-A51B-C498E2D52ACD</key>
+		<dict>
+			<key>className</key>
+			<string>DBGConsoleLog</string>
+			<key>documentTypeString</key>
+			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
+			<key>fileName</key>
+			<string>F59EEECD-75AF-4821-A51B-C498E2D52ACD.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>Hello_Fltk project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>Hello_Fltk</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Run Hello_Fltk</string>
+			<key>timeStartedRecording</key>
+			<real>682460449.49945199</real>
+			<key>timeStoppedRecording</key>
+			<real>682460453.15304995</real>
+			<key>title</key>
+			<string>Run Hello_Fltk</string>
+			<key>uniqueIdentifier</key>
+			<string>F59EEECD-75AF-4821-A51B-C498E2D52ACD</string>
 		</dict>
 	</dict>
 </dict>

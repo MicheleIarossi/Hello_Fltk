@@ -30,11 +30,13 @@
 */
 
 #include "Graphics.hpp"
+
+using namespace mathsophy::graphics;
+
+#include "demoapp.hpp"
 #include "examples.h"
 
 #include <sstream>
-
-using namespace mathsophy::graphics;
 
 // factorial
 static double fact(int n) {
@@ -545,96 +547,6 @@ void menu()
     win.attach(menu);
 
     win.wait_for_button();
-}
-
-// example of a class definition for a little application
-class Lines_window : public Simple_window
-{
-public:
-    Lines_window(Point xy,int w,int h,const char* title);
-    virtual ~Lines_window() { color_menu.destroy(); }
-    Open_polyline lines;
-private:
-    Button add_button;
-    Button menu_button;
-    Menu color_menu;
-    In_box next_x;
-    In_box next_y;
-    Out_box xy_out;
-    void add();
-    void menu_pressed();
-    void red_pressed();
-    void blue_pressed();
-    void green_pressed();
-};
-
-Lines_window::Lines_window(Point xy,int w,int h,const char* title) :
-    Simple_window(xy, w, h, title),
-    add_button{Point{x_max()-250,0},100,50,"Add point",
-        [](Fl_Widget* w, void* lw) {static_cast<Lines_window*>(lw)->add();},this},
-    menu_button{Point{x_max()-250,100},100,50,"Menu color",
-    [](Fl_Widget* w, void* lw) {static_cast<Lines_window*>(lw)->menu_pressed();},this},
-    color_menu(Point{x_max()-250,100},Menu_type::vertical),
-    next_x{Point{100,0},50,20,"next x:"},
-    next_y{Point{250,0},50,20,"next y:"},
-    xy_out{Point{100,50},100,20,"current (x,y):"}
-{
-    color_menu.add_button(new Button{Point{0,0},100,50,"Red",[](Fl_Widget* w, void* lw) {static_cast<Lines_window*>(lw)->red_pressed();},this});
-    color_menu.add_button(new Button{Point{0,0},100,50,"Blue",[](Fl_Widget* w, void* lw) {static_cast<Lines_window*>(lw)->blue_pressed();},this});
-    color_menu.add_button(new Button{Point{0,0},100,50,"Green",[](Fl_Widget* w, void* lw) {static_cast<Lines_window*>(lw)->green_pressed();},this});
-    color_menu.hide();
-    attach(add_button);
-    attach(menu_button);
-    attach(color_menu);
-    attach(next_x);
-    attach(next_y);
-    attach(xy_out);
-    attach(lines);
-}
-
-void Lines_window::add()
-{
-    int x = next_x.get_input_integer();
-    int y = next_y.get_input_integer();
-    lines.add_point(Point{x,y});
-    xy_out.set_output_text(string{"("+to_string(x)+","+
-        to_string(y)+")"});
-    redraw();
-}
-
-// callback called when the menu button is pressed
-void Lines_window::menu_pressed()
-{
-    menu_button.hide();
-    color_menu.show();
-    redraw();
-}
-
-// callback called when the red button is pressed
-void Lines_window::red_pressed()
-{
-    lines.set_color(Color_type::red);
-    color_menu.hide();
-    menu_button.show();
-    redraw();
-}
-
-// callback called when the blue button is pressed
-void Lines_window::blue_pressed()
-{
-    lines.set_color(Color_type::blue);
-    color_menu.hide();
-    menu_button.show();
-    redraw();
-}
-
-// callback called when the green button is pressed
-void Lines_window::green_pressed()
-{
-    lines.set_color(Color_type::green);
-    color_menu.hide();
-    menu_button.show();
-    redraw();
 }
 
 // example of an application
